@@ -200,16 +200,20 @@ int Sweep() {
   m.lcd.clear();
   m.lcd.home();
   int dir;
+  int delayperiod = 600;
   int forward = getRange();
   rangerServo.write(125);
+  delay(delayperiod);
   int left = getRange();
-  rangerServo.write(25);
+  rangerServo.write(55);
+  delay(delayperiod);
   int right = getRange();
   if (left > forward) {
     if (right > left) {
       dir = 0;
+    } else {
+      dir = 1;
     }
-    dir = 1;
   }
   m.lcd.clear();
   if (dir == 0) {
@@ -226,20 +230,24 @@ void Chicken() {
   rightWheel->setSpeed(100);
   m.lcd.clear();
   while(1) {
+    leftWheel->run(FORWARD);
+    rightWheel->run(FORWARD);
     int sweepres = Sweep();
+    rangerServo.write(90);
+    delay(400);
     int dist = getRange();
-    if (dist < 15) {
+    if (dist < 25) {
       if (sweepres == 0) {
         leftWheel->run(FORWARD);
         rightWheel->run(BACKWARD);
-        delay(2000);
+        delay(1500);
         leftWheel->run(RELEASE);
         rightWheel->run(RELEASE);
         }
       else if (sweepres == 1){
         leftWheel->run(BACKWARD);
         rightWheel->run(FORWARD);
-        delay(2000);
+        delay(1500);
         leftWheel->run(RELEASE);
         rightWheel->run(RELEASE);
        }
